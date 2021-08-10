@@ -3,6 +3,7 @@ import { ScrollView } from 'react-native'
 import { Text, View, StyleSheet, TextInput, TouchableHighlight } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import { openDatabase } from 'react-native-sqlite-storage'
+import LinearGradient from 'react-native-linear-gradient'
 
 let db = openDatabase({
     name: 'yds',
@@ -84,28 +85,28 @@ export default class Quiz extends Component {
     render() {
         let countQuestion = this.state.countOfQuestions
         return (
-            <View style={styles.container}>
+            <LinearGradient colors={['#25283D', '#2C5364']} style={styles.container}>
                 {/*SKOR TABELASI */}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                     <View style={{
-                        alignItems: 'center', backgroundColor: 'green',
+                        alignItems: 'center', backgroundColor: '#285943',
                         paddingHorizontal: 25, paddingVertical: 10,
                         borderRadius: 6
                     }}>
-                        <Text style={{ color: 'white', fontWeight: 'bold' }}>Doğru</Text>
+                        <Text style={{ color: 'wheat', fontWeight: 'bold' }}>Doğru</Text>
                         <Text style={{
-                            color: 'white', marginTop: 6,
+                            color: 'wheat', marginTop: 6,
                             fontSize: 18, fontWeight: 'bold'
                         }}>{this.state.correctAnswersCount}</Text>
                     </View>
                     <View style={{
-                        alignItems: 'center', backgroundColor: 'red',
+                        alignItems: 'center', backgroundColor: '#DE3C4B',
                         paddingHorizontal: 25, paddingVertical: 10,
                         borderRadius: 6
                     }}>
-                        <Text style={{ color: 'white', fontWeight: 'bold' }}>Yanlış</Text>
+                        <Text style={{ color: 'wheat', fontWeight: 'bold' }}>Yanlış</Text>
                         <Text style={{
-                            color: 'white', marginTop: 6,
+                            color: 'wheat', marginTop: 6,
                             fontSize: 18, fontWeight: 'bold'
                         }}>{this.state.currentQuestionIndex - this.state.correctAnswersCount}</Text>
                     </View>
@@ -121,13 +122,13 @@ export default class Quiz extends Component {
                                         correctAnswersCount: 0, countOfQuestions: 0, currentQuestionIndex: 0,
                                         questions: [], answerList: []
                                     })} style={[styles.btn, { marginBottom: 10 }]}>
-                                        <Text>Sıfırla</Text>
+                                        <Text style={{ color: 'white' }}>Sıfırla</Text>
                                     </TouchableHighlight>
                                     <ScrollView showsVerticalScrollIndicator={false}>
                                         {this.state.answerList.map((l, i) => (
                                             <ListItem containerStyle={{
                                                 backgroundColor: l.isCorrect == true ?
-                                                    'green' : 'red'
+                                                    '#285943' : '#DE3C4B'
                                             }} bottomDivider key={i}>
                                                 <ListItem.Content>
                                                     <ListItem.Title style={{ color: 'white' }}>
@@ -143,16 +144,19 @@ export default class Quiz extends Component {
                                 <>
                                     <TextInput style={{
                                         borderBottomWidth: 0.75,
+                                        borderBottomColor: 'wheat',
                                         marginHorizontal: '35%',
-                                        textAlign: 'center'
+                                        textAlign: 'center',
+                                        color: 'white'
                                     }} keyboardType='numeric' onChangeText={(val) =>
                                         this.checkQuizLimit(val)
                                     } value={this.state.countOfQuestions === 0 ? '' :
                                         Number(this.state.countOfQuestions).toString()}
                                     />
                                     <TouchableHighlight style={styles.btn}
-                                        onPress={() => this.getQuiz(this.state.countOfQuestions)}>
-                                        <Text style={{ fontWeight: 'bold' }}>Başlat</Text>
+                                        onPress={() => this.getQuiz(this.state.countOfQuestions)}
+                                        underlayColor={'none'}>
+                                        <Text style={{ fontWeight: 'bold', color: 'white' }}>Başlat</Text>
                                     </TouchableHighlight>
                                 </>
                             )}
@@ -161,33 +165,34 @@ export default class Quiz extends Component {
                         <View style={{ marginTop: 30 }}>
                             <Text style={{
                                 alignSelf: 'center', fontWeight: 'bold',
-                                fontSize: 18
+                                fontSize: 18, color: 'wheat'
                             }}>
                                 {this.state.questions[this.state.currentQuestionIndex].vocabulary}
                             </Text>
                             <TextInput
                                 style={{
                                     borderBottomWidth: 1,
-                                    width: '75%', alignSelf: 'center'
+                                    width: '75%', alignSelf: 'center',
+                                    borderBottomColor: 'wheat', color: 'white'
                                 }} onChangeText={(val) => this.setState({ answerOfUser: val })}
                                 ref={input => { this.textInput = input }} />
                             <TouchableHighlight style={{
-                                backgroundColor: 'darkcyan',
-                                width: '60%', alignSelf: 'center',
+                                backgroundColor: '#07BEB8',
+                                width: '75%', alignSelf: 'center',
                                 paddingHorizontal: 15,
                                 paddingVertical: 6, alignItems: 'center',
                                 marginTop: 15, borderRadius: 6
                             }} onPress={() => {
                                 this.textInput.clear()
                                 this.checkQuestion(this.state.currentQuestionIndex)
-                            }}>
+                            }} underlayColor={'none'}>
                                 <Text style={{ color: 'white', fontWeight: 'bold' }}>CEVAPLA</Text>
                             </TouchableHighlight>
                         </View>
                     )
                 }
                 {console.log(this.state.answerList)}
-            </View>
+            </LinearGradient>
         )
     }
 }
@@ -195,7 +200,8 @@ export default class Quiz extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        paddingTop: 25
     },
     btn: {
         alignItems: 'center',
@@ -206,6 +212,6 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         borderRadius: 5,
         marginTop: 10,
-        borderColor: 'darkslategray'
+        borderColor: 'wheat'
     }
 })

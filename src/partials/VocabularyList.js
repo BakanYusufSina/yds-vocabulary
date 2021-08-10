@@ -104,13 +104,14 @@ export default class VocabularyList extends Component {
                 <>
                     <View>
                         <Input
-                            leftIcon={<Icon name='search' size={22} />}
+                            leftIcon={<Icon name='search' color='wheat' size={22} />}
                             maxLength={15}
                             containerStyle={{
                                 marginTop: '2%',
                                 marginBottom: '6%',
                                 height: 36
                             }}
+                            inputStyle={{ color: 'white' }}
                             onChangeText={async (val) => {
                                 await this.setState({ filterText: val })
                                 this.filterVocabularies()
@@ -120,9 +121,9 @@ export default class VocabularyList extends Component {
                         {vocabulariesList.map((l, i) => (
                             <ListItem key={i}
                                 linearGradientProps={{
-                                    colors: ['#FF9800', '#F44336'],
+                                    colors: ['#07BEB8', '#EFD9CE'],
                                     start: { x: 1, y: 0 },
-                                    end: { x: 0.2, y: 0 },
+                                    end: { x: 0.25, y: 0 },
                                 }}
                                 ViewComponent={LinearGradient} bottomDivider>
                                 <ListItem.Content>

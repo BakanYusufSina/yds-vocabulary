@@ -3,6 +3,7 @@ import {
     View, Text, StyleSheet,
     TouchableHighlight
 } from 'react-native'
+import LinearGradient from 'react-native-linear-gradient'
 import { openDatabase } from 'react-native-sqlite-storage'
 
 export default function Home(props) {
@@ -18,20 +19,22 @@ export default function Home(props) {
         })
     }, [])
     return (
-        <View style={styles.container}>
+        <LinearGradient colors={['#25283D', '#2C5364']} style={styles.container}>
             <View style={{ flex: 1, justifyContent: 'flex-end' }}>
                 <TouchableHighlight style={styles.btn}
-                    onPress={() => props.navigation.navigate('Vocabularies')}>
+                    onPress={() => props.navigation.navigate('Vocabularies')}
+                    underlayColor={'#EFD9CE'}>
                     <Text style={styles.txt}>Kelime Ekle</Text>
                 </TouchableHighlight>
             </View>
             <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-                <TouchableHighlight style={[styles.btn, { backgroundColor: 'darkslategray' }]}
-                    onPress={() => props.navigation.navigate('Quiz')}>
+                <TouchableHighlight style={[styles.btn, { backgroundColor: '#EFD9CE' }]}
+                    onPress={() => props.navigation.navigate('Quiz')}
+                    underlayColor={'#07BEB8'}>
                     <Text style={styles.txt}>QUIZ</Text>
                 </TouchableHighlight>
             </View>
-        </View>
+        </LinearGradient>
     )
 }
 
@@ -46,13 +49,13 @@ const styles = StyleSheet.create({
         borderColor: 'darkslategray',
         borderWidth: 0.2,
         marginHorizontal: '25%',
-        backgroundColor: 'darkcyan',
+        backgroundColor: '#07BEB8',
         marginVertical: 10,
         alignItems: 'center',
-        paddingVertical: 26
+        paddingVertical: 18
     },
     txt: {
-        color: 'white',
+        color: 'darkslategray',
         fontWeight: 'bold',
         fontSize: 15
     }

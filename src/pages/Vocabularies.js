@@ -3,6 +3,7 @@ import { Dimensions } from 'react-native'
 import { TouchableHighlight } from 'react-native'
 import { Text, View, StyleSheet } from 'react-native'
 import { Overlay } from 'react-native-elements'
+import LinearGradient from 'react-native-linear-gradient'
 import AddVocabulary from '../partials/AddVocabulary'
 import VocabularyList from '../partials/VocabularyList'
 
@@ -10,7 +11,7 @@ export default function Vocabularies() {
     const [showOverlay, setShowOverlay] = useState(false)
     const [refreshList, setRefresh] = useState(false)
     return (
-        <View style={styles.container}>
+        <LinearGradient colors={['#25283D', '#2C5364']} style={styles.container}>
             <VocabularyList refreshVocabularyList={refreshList}
                 setRefreshList={() => setRefresh(false)} />
             {/*KELİME EKLEME BUTONU*/}
@@ -20,12 +21,12 @@ export default function Vocabularies() {
                 </TouchableHighlight>
                 <Overlay visible={showOverlay}
                     onBackdropPress={() => setShowOverlay(false)}
-                    overlayStyle={{ width: '85%' }}>
+                    overlayStyle={{ width: '85%', backgroundColor: '#25283D' }}>
                     <AddVocabulary isAdded={() => setRefresh(true)}
                         showOverlay={() => setShowOverlay(false)} />
                 </Overlay>
             </>
-        </View>
+        </LinearGradient>
     )
 }
 
@@ -43,11 +44,11 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         justifyContent: 'center',
-        backgroundColor: 'darkslategray',
+        backgroundColor: '#EFD9CE',
         right: (Dimensions.get('screen').width - 60) / 2
     },
     addBtnText: {
         fontSize: 26,
-        color: 'white'
+        color: 'darkslategray'
     }
 })

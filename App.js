@@ -8,6 +8,11 @@ import Quiz from './src/pages/Quiz'
 
 const Stack = createStackNavigator()
 
+const options = {
+  headerStyle: { elevation: 0, backgroundColor: '#25283D' }
+  , headerTitle: '', headerTintColor: 'wheat'
+}
+
 export default class App extends Component {
   render() {
     return (
@@ -16,9 +21,9 @@ export default class App extends Component {
           <Stack.Screen name="Home" component={Home}
             options={{ headerShown: false }} />
           <Stack.Screen name='Vocabularies' component={Vocabularies}
-            options={{ headerStyle: { elevation: 0, }, headerTitle: '' }} />
+            options={options} />
           <Stack.Screen name='Quiz' component={Quiz}
-            options={{ headerStyle: { elevation: 0 }, headerTitle: '' }} />
+            options={options} />
         </Stack.Navigator>
       </NavigationContainer>
     )

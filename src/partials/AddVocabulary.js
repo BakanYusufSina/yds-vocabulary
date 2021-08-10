@@ -36,21 +36,28 @@ export default function AddVocabulary(props) {
             <Input
                 containerStyle={{ width: '100%' }}
                 label='Kelime'
-                onChangeText={val => setVocabulary(val)}>
+                onChangeText={val => setVocabulary(val)}
+                labelStyle={{ color: 'wheat' }}
+                inputStyle={{ color: 'white', fontSize: 14 }}>
             </Input>
             <Input
                 containerStyle={{ width: '100%' }}
                 label='Anlamı'
-                onChangeText={val => setTranslate(val)}>
+                onChangeText={val => setTranslate(val)}
+                labelStyle={{ color: 'wheat' }}
+                inputStyle={{ color: 'white', fontSize: 14 }}>
             </Input>
             <TouchableHighlight style={{
                 marginHorizontal: '15%',
-                backgroundColor: 'darkslategray',
+                backgroundColor: 'wheat',
                 alignItems: 'center',
                 paddingVertical: 10,
                 borderRadius: 3
             }} onPress={() => addNewVocabulary()}>
-                <Text style={{ color: 'white', fontWeight: 'bold' }}>KAYDET</Text>
+                <Text style={{
+                    color: 'darkslategray',
+                    fontWeight: 'bold'
+                }}>KAYDET</Text>
             </TouchableHighlight>
         </View>
     )
