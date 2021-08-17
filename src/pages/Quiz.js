@@ -58,10 +58,30 @@ export default class Quiz extends Component {
     }
     //Sorunun doğruluğunu kontrol eden fonksiyon
     checkQuestion = async (index) => {
-        if (this.state.answerOfUser === this.state.questions[index].translate) {
-            this.setState({
-                isCorrect: true, correctAnswersCount: (this.state.correctAnswersCount + 1)
-            })
+        let trueAnswerBool = false
+        let isCommaExist = this.state.questions[index].translate.indexOf(',')
+        if (isCommaExist == -1) {
+            if (this.state.answerOfUser.toLowerCase() ===
+                this.state.questions[index].translate.toLowerCase()) {
+                trueAnswerBool = true
+                this.setState({
+                    isCorrect: true, correctAnswersCount: (this.state.correctAnswersCount + 1)
+                })
+            }
+        }
+        else {
+            let answersArray = this.state.questions[index].translate.split(/[' ,']+/)
+            for (let i = 0; i < answersArray.length; i++) {
+                if (this.state.answerOfUser.toLowerCase() ===
+                    answersArray[i].toLowerCase() || (
+                        this.state.answerOfUser.toLowerCase() ===
+                        this.state.questions[index].translate.toLowerCase())) {
+                    trueAnswerBool = true
+                    this.setState({
+                        isCorrect: true, correctAnswersCount: (this.state.correctAnswersCount + 1)
+                    })
+                }
+            }
         }
         if (this.state.countOfQuestions > this.state.currentQuestionIndex)
             await this.setState({
@@ -70,7 +90,7 @@ export default class Quiz extends Component {
                     vocabulary: this.state.questions[index].vocabulary,
                     answer: this.state.questions[index].translate,
                     userAnswer: this.state.answerOfUser,
-                    isCorrect: this.state.answerOfUser === this.state.questions[index].translate ? true : false
+                    isCorrect: trueAnswerBool
                 }]
             })
     }
@@ -174,7 +194,7 @@ export default class Quiz extends Component {
                                     borderBottomWidth: 1,
                                     width: '75%', alignSelf: 'center',
                                     borderBottomColor: 'wheat', color: 'white'
-                                }} onChangeText={(val) => this.setState({ answerOfUser: val })}
+                                }} onChangeText={(val) => this.setState({ answerOfUser: val.toLowerCase() })}
                                 ref={input => { this.textInput = input }} />
                             <TouchableHighlight style={{
                                 backgroundColor: '#07BEB8',
@@ -191,7 +211,6 @@ export default class Quiz extends Component {
                         </View>
                     )
                 }
-                {console.log(this.state.answerList)}
             </LinearGradient>
         )
     }
