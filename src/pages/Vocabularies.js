@@ -13,16 +13,20 @@ export default function Vocabularies() {
     return (
         <LinearGradient colors={['#25283D', '#2C5364']} style={styles.container}>
             <VocabularyList refreshVocabularyList={refreshList}
-                setRefreshList={() => setRefresh(false)} />
+            />
             {/*KELİME EKLEME BUTONU*/}
             <>
-                <TouchableHighlight style={styles.addBtn} onPress={() => setShowOverlay(true)}>
+                <TouchableHighlight style={styles.addBtn} onPress={() => setShowOverlay(true)}
+                    underlayColor={'#EFD9CE'}>
                     <Text style={styles.addBtnText}>+</Text>
                 </TouchableHighlight>
                 <Overlay visible={showOverlay}
                     onBackdropPress={() => setShowOverlay(false)}
                     overlayStyle={{ width: '85%', backgroundColor: '#25283D' }}>
-                    <AddVocabulary isAdded={() => setRefresh(true)}
+                    <AddVocabulary isAdded={() => {
+                        setRefresh(true)
+                        setTimeout(() => setRefresh(false), 500)
+                    }}
                         showOverlay={() => setShowOverlay(false)} />
                 </Overlay>
             </>

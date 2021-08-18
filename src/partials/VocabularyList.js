@@ -88,10 +88,6 @@ export default class VocabularyList extends Component {
     render() {
         let vocabulariesList = this.state.filterText === '' ?
             this.state.vocabularies : this.state.filteredVocabularies
-        if (this.props.refreshVocabularyList) {
-            this.getVocabularies()
-            this.props.setRefreshList()
-        }
         if (this.state.vocabularies.length === 0)
             return <View><Text>There is no vocabulary yet</Text></View>
         return (
@@ -142,30 +138,37 @@ export default class VocabularyList extends Component {
                     <>
                         <Overlay isVisible={this.state.showOverlay}
                             onBackdropPress={() => this.setState({ showOverlay: false, isEditing: false })}
-                            overlayStyle={{ width: '75%' }}>
+                            overlayStyle={{ width: '75%', backgroundColor: '#25283D' }}>
                             <View>
                                 {this.state.isEditing ?
                                     <View>
                                         <TextInput defaultValue={this.state.selectedVocabulary.vocabulary}
-                                            style={{ borderBottomWidth: 0.5 }}
+                                            style={{
+                                                borderBottomWidth: 0.5, borderBottomColor: 'wheat',
+                                                color: 'white', fontSize: 15
+                                            }}
                                             onChangeText={(val) => this.setState({ editedVocabulary: val })} />
                                         <TextInput defaultValue={this.state.selectedVocabulary.translate}
-                                            style={{ borderBottomWidth: 0.5 }}
+                                            style={{
+                                                borderBottomWidth: 0.5, borderBottomColor: 'wheat',
+                                                color: 'white', fontSize: 15
+                                            }}
                                             onChangeText={(val) => this.setState({ editedTranslate: val })} />
                                         <TouchableHighlight style={{
                                             width: '75%',
                                             alignSelf: 'center', alignItems: 'center',
-                                            backgroundColor: 'green', paddingVertical: 10,
+                                            backgroundColor: 'wheat', paddingVertical: 10,
                                             borderRadius: 3, marginTop: 10
                                         }} onPress={() => this.editVocabulary()}>
-                                            <Text style={{ color: 'white', fontWeight: 'bold' }}>KAYDET</Text>
+                                            <Text style={{ color: 'darkslategray', fontWeight: 'bold' }}>
+                                                {this.state.isEditing ? 'GÜNCELLE' : 'KAYDET'}</Text>
                                         </TouchableHighlight>
                                     </View> :
                                     <View>
-                                        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                                        <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'wheat' }}>
                                             {this.state.selectedVocabulary.vocabulary}
                                         </Text>
-                                        <Text style={{ fontSize: 14 }}>
+                                        <Text style={{ fontSize: 14, color: 'white' }}>
                                             {this.state.selectedVocabulary.translate}
                                         </Text>
                                     </View>
@@ -175,7 +178,7 @@ export default class VocabularyList extends Component {
                                     flexDirection: 'row', position: 'absolute',
                                     right: 0
                                 }}>
-                                    <Icon name='close' type='Ionicon' size={22} color='darkred'
+                                    <Icon name='delete' type='Ionicon' size={22} color='red'
                                         onPress={() => this.deleteVocabulary()} />
                                     <Icon name='edit' type='Ionicon' size={22} color='darkcyan'
                                         onPress={() => this.setState({ isEditing: !this.state.isEditing })} />

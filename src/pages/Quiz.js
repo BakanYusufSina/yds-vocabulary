@@ -60,6 +60,7 @@ export default class Quiz extends Component {
     checkQuestion = async (index) => {
         let trueAnswerBool = false
         let isCommaExist = this.state.questions[index].translate.indexOf(',')
+        const regex = new RegExp('[a-zA-ZğüşçiöİĞÜŞÇÖ]')
         if (isCommaExist == -1) {
             if (this.state.answerOfUser.toLowerCase() ===
                 this.state.questions[index].translate.toLowerCase()) {

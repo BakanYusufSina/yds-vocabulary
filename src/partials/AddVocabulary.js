@@ -27,6 +27,7 @@ export default function AddVocabulary(props) {
                             { cancelable: false }
                         );
                         props.showOverlay()
+                        props.isAdded()
                     }
                 }, (err) => console.log(err))
         })

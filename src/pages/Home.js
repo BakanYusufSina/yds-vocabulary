@@ -30,7 +30,7 @@ export default function Home(props) {
             <View style={{ flex: 1, justifyContent: 'flex-start' }}>
                 <TouchableHighlight style={[styles.btn, { backgroundColor: '#EFD9CE' }]}
                     onPress={() => props.navigation.navigate('Quiz')}
-                    underlayColor={'#07BEB8'}>
+                    underlayColor={'#03DAC6'}>
                     <Text style={styles.txt}>QUIZ</Text>
                 </TouchableHighlight>
             </View>
@@ -48,11 +48,11 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         borderColor: 'darkslategray',
         borderWidth: 0.2,
-        marginHorizontal: '25%',
+        marginHorizontal: '18%',
         backgroundColor: '#07BEB8',
         marginVertical: 10,
         alignItems: 'center',
-        paddingVertical: 18
+        paddingVertical: 15
     },
     txt: {
         color: 'darkslategray',
