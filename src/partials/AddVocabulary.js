@@ -11,26 +11,32 @@ export default function AddVocabulary(props) {
             name: 'yds',
             createFromLocation: '~www/sqlite_yds.db'
         })
-        db.transaction(tx => {
-            tx.executeSql('INSERT INTO yds(vocabulary, translate) VALUES("' + vocabulary + '","'
-                + translate + '")', [], (tx, results) => {
-                    console.log('Results', results.rowsAffected);
-                    if (results.rowsAffected > 0) {
-                        Alert.alert(
-                            'Başarılı',
-                            'Kelime Kaydedildi',
-                            [
-                                {
-                                    text: 'Tamam',
-                                },
-                            ],
-                            { cancelable: false }
-                        );
-                        props.showOverlay()
-                        props.isAdded()
-                    }
-                }, (err) => console.log(err))
-        })
+        if (vocabulary != '' && translate != '') {
+            db.transaction(tx => {
+                tx.executeSql('INSERT INTO yds(vocabulary, translate) VALUES("' + vocabulary + '","'
+                    + translate + '")', [], (tx, results) => {
+                        console.log('Results', results.rowsAffected);
+                        if (results.rowsAffected > 0) {
+                            Alert.alert(
+                                'Başarılı',
+                                'Kelime Kaydedildi',
+                                [
+                                    {
+                                        text: 'Tamam',
+                                    },
+                                ],
+                                { cancelable: false }
+                            );
+                            props.showOverlay()
+                            props.isAdded()
+                        }
+                    }, (err) => console.log(err))
+            })
+        }
+        else {
+            Alert.alert('Lütfen boş alan bırakmayınız!')
+        }
+
     }
     return (
         <View>
@@ -39,7 +45,8 @@ export default function AddVocabulary(props) {
                 label='Kelime'
                 onChangeText={val => setVocabulary(val)}
                 labelStyle={{ color: 'wheat' }}
-                inputStyle={{ color: 'white', fontSize: 14 }}>
+                inputStyle={{ color: 'white', fontSize: 14 }}
+                autoFocus>
             </Input>
             <Input
                 containerStyle={{ width: '100%' }}
@@ -54,7 +61,7 @@ export default function AddVocabulary(props) {
                 alignItems: 'center',
                 paddingVertical: 10,
                 borderRadius: 3
-            }} onPress={() => addNewVocabulary()}>
+            }} onPress={() => addNewVocabulary()} underlayColor={'white'}>
                 <Text style={{
                     color: 'darkslategray',
                     fontWeight: 'bold'

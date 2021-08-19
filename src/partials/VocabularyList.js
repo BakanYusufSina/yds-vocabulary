@@ -27,6 +27,12 @@ export default class VocabularyList extends Component {
             filteredVocabularies: []
         }
     }
+    componentDidUpdate(props) {
+        //Check parent if new vocabulary added update vocabularyList
+        if (props.updateList) {
+            this.getVocabularies()
+        }
+    }
     componentDidMount() {
         this.getVocabularies()
     }
@@ -44,20 +50,35 @@ export default class VocabularyList extends Component {
             }, (err) => console.log(err))
         })
     }
+    //Ask user to delete vocabulary and delete from db
     deleteVocabulary = () => {
-        db.transaction(tx => {
-            tx.executeSql('DELETE FROM yds WHERE id=?',
-                [this.state.selectedVocabulary.id], (tx, results) => {
-                    if (results.rowsAffected > 0) {
-                        Alert.alert(this.state.selectedVocabulary.vocabulary
-                            + ' silindi!')
-                        this.setState({
-                            selectedVocabulary: {}, showOverlay: false,
-                            isEditing: false
-                        })
-                    }
-                })
-        }, (err) => console.log(err))
+        Alert.alert(
+            'Görevi Sil',
+            'Seçtiğiniz kelime silinsin mi?',
+            [{
+                text: 'İptal',
+                style: 'cancel'
+            }, {
+                text: 'Sil',
+                onPress: () => {
+                    db.transaction(tx => {
+                        tx.executeSql('DELETE FROM yds WHERE id=?',
+                            [this.state.selectedVocabulary.id], (tx, results) => {
+                                if (results.rowsAffected > 0) {
+                                    Alert.alert(this.state.selectedVocabulary.vocabulary
+                                        + ' silindi!')
+                                    this.setState({
+                                        selectedVocabulary: {}, showOverlay: false,
+                                        isEditing: false
+                                    })
+                                    this.getVocabularies()
+                                }
+                            })
+                    }, (err) => console.log(err))
+                }
+            }]
+        )
+
     }
     editVocabulary = () => {
         this.setState({
@@ -74,6 +95,7 @@ export default class VocabularyList extends Component {
                     if (results.rowsAffected > 0) {
                         Alert.alert(this.state.selectedVocabulary.vocabulary + ' düzenlendi!')
                         this.setState({ showOverlay: false })
+                        this.getVocabularies()
                     }
                 }, (err) => { console.log(err) })
         })
@@ -159,9 +181,9 @@ export default class VocabularyList extends Component {
                                             alignSelf: 'center', alignItems: 'center',
                                             backgroundColor: 'wheat', paddingVertical: 10,
                                             borderRadius: 3, marginTop: 10
-                                        }} onPress={() => this.editVocabulary()}>
+                                        }} onPress={() => this.editVocabulary()} underlayColor={'white'}>
                                             <Text style={{ color: 'darkslategray', fontWeight: 'bold' }}>
-                                                {this.state.isEditing ? 'GÜNCELLE' : 'KAYDET'}</Text>
+                                                GÜNCELLE</Text>
                                         </TouchableHighlight>
                                     </View> :
                                     <View>

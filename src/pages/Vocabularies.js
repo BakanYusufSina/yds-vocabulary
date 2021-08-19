@@ -12,8 +12,7 @@ export default function Vocabularies() {
     const [refreshList, setRefresh] = useState(false)
     return (
         <LinearGradient colors={['#25283D', '#2C5364']} style={styles.container}>
-            <VocabularyList refreshVocabularyList={refreshList}
-            />
+            <VocabularyList updateList={refreshList} />
             {/*KELİME EKLEME BUTONU*/}
             <>
                 <TouchableHighlight style={styles.addBtn} onPress={() => setShowOverlay(true)}
