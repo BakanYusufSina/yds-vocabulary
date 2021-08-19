@@ -171,7 +171,7 @@ export default class Quiz extends Component {
                                         color: 'white'
                                     }} keyboardType='numeric' onChangeText={(val) =>
                                         this.checkQuizLimit(val)
-                                    } value={this.state.countOfQuestions === 0 ? '' :
+                                    } value={this.state.countOfQuestions === 0 ? '' : //Max question length
                                         Number(this.state.countOfQuestions).toString()}
                                     />
                                     <TouchableHighlight style={styles.btn}

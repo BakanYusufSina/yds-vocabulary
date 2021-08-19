@@ -111,7 +111,11 @@ export default class VocabularyList extends Component {
         let vocabulariesList = this.state.filterText === '' ?
             this.state.vocabularies : this.state.filteredVocabularies
         if (this.state.vocabularies.length === 0)
-            return <View><Text>There is no vocabulary yet</Text></View>
+            return <View style={{ alignSelf: 'center', marginTop: 15 }}>
+                <Text style={{ color: 'wheat', fontSize: 15 }}>
+                    Henüz kelime eklemediniz
+                </Text>
+            </View>
         return (
             <ScrollView style={{ flex: 1 }}
                 refreshControl={<RefreshControl refreshing={this.state.refreshing}
@@ -153,7 +157,7 @@ export default class VocabularyList extends Component {
                                         selectedVocabulary: { ...l },
                                         showOverlay: true
                                     })
-                                }} />
+                                }} iconStyle={{ color: 'darkslategray', fontSize: 18 }} />
                             </ListItem>
                         ))}
                     </View>
