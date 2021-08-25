@@ -166,13 +166,15 @@ export default class Quiz extends Component {
                                     <TextInput style={{
                                         borderBottomWidth: 0.75,
                                         borderBottomColor: 'wheat',
-                                        marginHorizontal: '35%',
+                                        marginHorizontal: '30%',
                                         textAlign: 'center',
                                         color: 'white'
                                     }} keyboardType='numeric' onChangeText={(val) =>
                                         this.checkQuizLimit(val)
                                     } value={this.state.countOfQuestions === 0 ? '' : //Max question length
                                         Number(this.state.countOfQuestions).toString()}
+                                        placeholder='Soru sayısı...'
+                                        placeholderTextColor='gray'
                                     />
                                     <TouchableHighlight style={styles.btn}
                                         onPress={() => this.getQuiz(this.state.countOfQuestions)}
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         paddingVertical: 6,
         paddingHorizontal: 15,
-        width: '35%',
+        width: '45%',
         borderWidth: 0.5,
         borderRadius: 5,
         marginTop: 10,

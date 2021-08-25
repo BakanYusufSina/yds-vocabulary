@@ -45,9 +45,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     btn: {
-        borderRadius: 6,
-        borderColor: 'darkslategray',
-        borderWidth: 0.2,
+        borderRadius: 50,
         marginHorizontal: '18%',
         backgroundColor: '#07BEB8',
         marginVertical: 10,
