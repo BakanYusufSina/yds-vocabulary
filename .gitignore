@@ -60,3 +60,6 @@ buck-out/
 
 #versions
 versions/
+
+/android/app/build
+/android/app/release
