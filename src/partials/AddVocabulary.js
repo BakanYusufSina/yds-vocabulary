@@ -13,8 +13,8 @@ export default function AddVocabulary(props) {
         })
         if (vocabulary != '' && translate != '') {
             db.transaction(tx => {
-                tx.executeSql('INSERT INTO yds(vocabulary, translate) VALUES("' + vocabulary + '","'
-                    + translate + '")', [], (tx, results) => {
+                tx.executeSql('INSERT INTO yds(vocabulary, translate) VALUES("' + vocabulary.toLowerCase().trim() + '","'
+                    + translate.toLowerCase().trim() + '")', [], (tx, results) => {
                         console.log('Results', results.rowsAffected);
                         if (results.rowsAffected > 0) {
                             Alert.alert(
@@ -46,14 +46,15 @@ export default function AddVocabulary(props) {
                 onChangeText={val => setVocabulary(val)}
                 labelStyle={{ color: 'wheat' }}
                 inputStyle={{ color: 'white', fontSize: 14 }}
-                autoFocus>
+                autoFocus value={vocabulary.trimLeft()}>
             </Input>
             <Input
                 containerStyle={{ width: '100%' }}
                 label='Anlamı'
                 onChangeText={val => setTranslate(val)}
                 labelStyle={{ color: 'wheat' }}
-                inputStyle={{ color: 'white', fontSize: 14 }}>
+                inputStyle={{ color: 'white', fontSize: 14 }}
+                value={translate.trimLeft()}>
             </Input>
             <TouchableHighlight style={{
                 marginHorizontal: '15%',

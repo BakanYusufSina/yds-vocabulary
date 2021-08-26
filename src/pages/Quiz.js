@@ -62,7 +62,7 @@ export default class Quiz extends Component {
         let isCommaExist = this.state.questions[index].translate.indexOf(',')
         const regex = new RegExp('[a-zA-ZğüşçiöİĞÜŞÇÖ]')
         if (isCommaExist == -1) {
-            if (this.state.answerOfUser.toLowerCase() ===
+            if (this.state.answerOfUser.toLowerCase().trim() ===
                 this.state.questions[index].translate.toLowerCase()) {
                 trueAnswerBool = true
                 this.setState({
@@ -73,9 +73,9 @@ export default class Quiz extends Component {
         else {
             let answersArray = this.state.questions[index].translate.split(/[' ,']+/)
             for (let i = 0; i < answersArray.length; i++) {
-                if (this.state.answerOfUser.toLowerCase() ===
+                if (this.state.answerOfUser.toLowerCase().trim() ===
                     answersArray[i].toLowerCase() || (
-                        this.state.answerOfUser.toLowerCase() ===
+                        this.state.answerOfUser.toLowerCase().trim() ===
                         this.state.questions[index].translate.toLowerCase())) {
                     trueAnswerBool = true
                     this.setState({
@@ -90,7 +90,7 @@ export default class Quiz extends Component {
                 answerList: [...this.state.answerList, {
                     vocabulary: this.state.questions[index].vocabulary,
                     answer: this.state.questions[index].translate,
-                    userAnswer: this.state.answerOfUser,
+                    userAnswer: this.state.answerOfUser.toLowerCase().trim(),
                     isCorrect: trueAnswerBool
                 }]
             })
@@ -136,16 +136,18 @@ export default class Quiz extends Component {
                 {this.state.questions.length === 0 ||
                     (this.state.currentQuestionIndex == this.state.countOfQuestions) ?
                     (
-                        <View>
+                        <View style={{ flex: 1 }}>
                             {this.state.currentQuestionIndex != 0 ? (
                                 <View style={{ marginTop: 15 }}>
-                                    <TouchableHighlight onPress={() => this.setState({
-                                        correctAnswersCount: 0, countOfQuestions: 0, currentQuestionIndex: 0,
-                                        questions: [], answerList: []
-                                    })} style={[styles.btn, { marginBottom: 10 }]}>
-                                        <Text style={{ color: 'white' }}>Sıfırla</Text>
-                                    </TouchableHighlight>
-                                    <ScrollView showsVerticalScrollIndicator={false}>
+                                    <View>
+                                        <TouchableHighlight onPress={() => this.setState({
+                                            correctAnswersCount: 0, countOfQuestions: 0, currentQuestionIndex: 0,
+                                            questions: [], answerList: []
+                                        })} style={[styles.btn, { marginBottom: 10 }]}>
+                                            <Text style={{ color: 'white' }}>Sıfırla</Text>
+                                        </TouchableHighlight>
+                                    </View>
+                                    <ScrollView showsVerticalScrollIndicator={false} >
                                         {this.state.answerList.map((l, i) => (
                                             <ListItem containerStyle={{
                                                 backgroundColor: l.isCorrect == true ?
@@ -198,7 +200,8 @@ export default class Quiz extends Component {
                                     width: '75%', alignSelf: 'center',
                                     borderBottomColor: 'wheat', color: 'white'
                                 }} onChangeText={(val) => this.setState({ answerOfUser: val.toLowerCase() })}
-                                ref={input => { this.textInput = input }} />
+                                ref={input => { this.textInput = input }}
+                                value={this.state.answerOfUser.trimLeft()} />
                             <TouchableHighlight style={{
                                 backgroundColor: '#07BEB8',
                                 width: '75%', alignSelf: 'center',
@@ -221,7 +224,7 @@ export default class Quiz extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flexGrow: 1,
         backgroundColor: 'white',
         paddingTop: 25
     },
