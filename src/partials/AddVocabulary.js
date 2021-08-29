@@ -15,7 +15,6 @@ export default function AddVocabulary(props) {
             db.transaction(tx => {
                 tx.executeSql('INSERT INTO yds(vocabulary, translate) VALUES("' + vocabulary.toLowerCase().trim() + '","'
                     + translate.toLowerCase().trim() + '")', [], (tx, results) => {
-                        console.log('Results', results.rowsAffected);
                         if (results.rowsAffected > 0) {
                             Alert.alert(
                                 'Başarılı',

@@ -136,9 +136,9 @@ export default class Quiz extends Component {
                 {this.state.questions.length === 0 ||
                     (this.state.currentQuestionIndex == this.state.countOfQuestions) ?
                     (
-                        <View style={{ flex: 1 }}>
+                        <>
                             {this.state.currentQuestionIndex != 0 ? (
-                                <View style={{ marginTop: 15 }}>
+                                <View style={{ marginTop: 15, flex: 1 }}>
                                     <View>
                                         <TouchableHighlight onPress={() => this.setState({
                                             correctAnswersCount: 0, countOfQuestions: 0, currentQuestionIndex: 0,
@@ -147,7 +147,8 @@ export default class Quiz extends Component {
                                             <Text style={{ color: 'white' }}>Sıfırla</Text>
                                         </TouchableHighlight>
                                     </View>
-                                    <ScrollView showsVerticalScrollIndicator={false} >
+                                    <ScrollView showsVerticalScrollIndicator={false}
+                                        style={{ flexGrow: 1 }} >
                                         {this.state.answerList.map((l, i) => (
                                             <ListItem containerStyle={{
                                                 backgroundColor: l.isCorrect == true ?
@@ -185,7 +186,7 @@ export default class Quiz extends Component {
                                     </TouchableHighlight>
                                 </>
                             )}
-                        </View>
+                        </>
                     ) : (
                         <View style={{ marginTop: 30 }}>
                             <Text style={{

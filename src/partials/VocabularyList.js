@@ -104,7 +104,7 @@ export default class VocabularyList extends Component {
         let filterText = this.state.filterText
         this.setState({
             filteredVocabularies: this.state.vocabularies.filter(i => i.vocabulary.toLowerCase().
-                includes(filterText))
+                includes(filterText.toLowerCase()))
         })
     }
     render() {
