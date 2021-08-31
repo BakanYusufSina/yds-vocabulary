@@ -6,6 +6,7 @@ import Home from './src/pages/Home'
 import Vocabularies from './src/pages/Vocabularies'
 import Quiz from './src/pages/Quiz'
 import { SafeAreaView } from 'react-native'
+import Dictionary from './src/pages/Dictionary'
 
 const Stack = createStackNavigator()
 
@@ -27,6 +28,8 @@ export default class App extends Component {
             <Stack.Screen name='Vocabularies' component={Vocabularies}
               options={options} />
             <Stack.Screen name='Quiz' component={Quiz}
+              options={options} />
+            <Stack.Screen name='Dictionary' component={Dictionary}
               options={options} />
           </Stack.Navigator>
         </NavigationContainer>
