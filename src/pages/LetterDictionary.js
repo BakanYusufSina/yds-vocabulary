@@ -3,18 +3,34 @@ import { ActivityIndicator } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { Text, View, ScrollView } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
+import Animated from 'react-native-reanimated'
 
 export default class LetterDictionary extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            dictionary: []
+            dictionary: [],
+            countOfVocabulary: 15,
+            scrollY: new Animated.Value(0),
+            loadMoreData: false
         }
     }
     componentDidMount() {
         this.setState({
             dictionary: this.props.route.params.dictionary
         })
+    }
+    isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+        const paddingToBottom = 20
+        return layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - paddingToBottom
+    }
+    loadMoreData = () => {
+        if (this.state.countOfVocabulary <= this.state.dictionary.length)
+            this.setState({
+                countOfVocabulary: this.state.countOfVocabulary + 15,
+                loadMoreData: false
+            })
     }
     render() {
         if (this.state.dictionary.length === 0)
@@ -24,8 +40,27 @@ export default class LetterDictionary extends Component {
                 </View>)
         return (
             <LinearGradient colors={['#25283D', '#2C5364']} style={styles.container}>
-                <ScrollView>
-                    {this.state.dictionary.map((l, i) => (
+                <Animated.ScrollView
+                    scrollEventThrottle={16}
+                    onScroll={Animated.event(
+                        [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
+                        {
+                            listener: event => {
+                                if (this.isCloseToBottom(event.nativeEvent)) {
+                                    this.setState({ loadMoreData: true })
+                                    this.loadMoreData()
+                                }
+                            }
+                        }
+                    )}
+                    onMomentumScrollEnd={({ nativeEvent }) => {
+                        if (this.isCloseToBottom(nativeEvent)) {
+                            this.setState({ loadMoreData: true })
+                            this.loadMoreData()
+                        }
+                    }}
+                >
+                    {this.state.dictionary.slice(0, this.state.countOfVocabulary).map((l, i) => (
                         <View key={i} style={styles.listItem}>
                             <Text style={styles.listItemText}>
                                 {l.vocabulary.charAt(0).toUpperCase() + l.vocabulary.slice(1)}
@@ -33,8 +68,10 @@ export default class LetterDictionary extends Component {
                             <Text style={{ color: 'white' }}>{l.translate}</Text>
                         </View>
                     ))}
-                </ScrollView>
-            </LinearGradient>
+                    {this.state.loadMoreData === true ?
+                        (<ActivityIndicator color={'wheat'} size={25} />) : <></>}
+                </Animated.ScrollView>
+            </LinearGradient >
         )
     }
 }
