@@ -1,28 +1,29 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, View, Text, Modal } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import { openDatabase } from 'react-native-sqlite-storage'
 import LinearGradient from 'react-native-linear-gradient'
 import { TouchableHighlight } from 'react-native'
 import LetterDictionary from './LetterDictionary'
 
 export default function Dictionary(props) {
-    const [vocabularies, setVocabularies] = useState([])
-    const [letterVisible, setLetterVisible] = useState(false)
-    const [chosenLetter, setChosenLetter] = useState('')
-    const [letterDictionary, setLetterDictionary] = useState([])
+    const [vocabularies, setVocabularies] = useState([])//All vocabularies
+    //Alphabet array
     const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p",
         "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Tüm Liste"];
     const db = openDatabase({
         name: 'yds',
         createFromLocation: '~www/sqlite_yds.db'
     })
+    //Get vocabularies from db with letter
     const getLetterDic = async (letter) => {
-        let arrayOfVocabulary = []
+        let arrayOfLetterVocabulary = []
         await vocabularies.map((l, i) => {
             if (l.vocabulary[0] == letter)
-                arrayOfVocabulary.push(l)
+                arrayOfLetterVocabulary.push(l)
         })
-        setLetterDictionary([...arrayOfVocabulary])
+        props.navigation.navigate('LetterDictionary', {
+            dictionary: arrayOfLetterVocabulary
+        })
     }
     useEffect(() => {
         db.transaction(tx => {
@@ -31,21 +32,20 @@ export default function Dictionary(props) {
                 for (let i = 0; i < results.rows.length; ++i) {
                     arrayOfVocabulary.push(results.rows.item(i))
                 }
+                //Get all vocabularies from db
                 setVocabularies([...arrayOfVocabulary])
             })
         }, (err) => console.log(err))
     }, [])
-    if (vocabularies.length === 0) return null
+    if (vocabularies.length === 0) return (
+        <LinearGradient colors={['#25283D', '#2C5364']} style={styles.container}>
+        </LinearGradient>)
     return (
         <LinearGradient colors={['#25283D', '#2C5364']} style={styles.container}>
             <View style={styles.sectionContainer}>
                 {alphabet.map((l, i) => (
-                    <TouchableHighlight style={styles.btn} key={i} onPress={async () => {
-                        setLetterDictionary([])
-                        await setChosenLetter(l)
-                        getLetterDic(l)
-                        console.log('dictionary', letterDictionary)
-                        setLetterVisible(true)
+                    <TouchableHighlight style={styles.btn} key={i} onPress={() => {
+                        getLetterDic(l).then(() => { })
                     }} underlayColor={'gray'}>
                         <Text style={{
                             color: 'darkslategray',
@@ -54,27 +54,6 @@ export default function Dictionary(props) {
                     </TouchableHighlight>
                 ))}
             </View>
-            <View style={{ flex: 1 }}>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={letterVisible}
-                    onRequestClose={() => {
-                        setLetterVisible(!letterVisible);
-                    }}
-                >
-                    <LetterDictionary setVisible={() => setLetterVisible(false)}
-                        vocabularyList={chosenLetter != '' ? letterDictionary : []} />
-                </Modal>
-            </View>
-            {/*vocabularies.slice(0,100).map((l, i) => (
-                    <ListItem key={i}>
-                        <ListItem.Content>
-                            <ListItem.Title>{l.vocabulary}</ListItem.Title>
-                            <ListItem.Subtitle>{l.translate}</ListItem.Subtitle>
-                        </ListItem.Content>
-                    </ListItem>
-                ))*/}
         </LinearGradient>
     )
 }

@@ -1,37 +1,58 @@
-import React, { useEffect, useState } from 'react'
-import { ScrollView } from 'react-native'
+import React, { Component } from 'react'
+import { ActivityIndicator } from 'react-native'
 import { StyleSheet } from 'react-native'
-import { View, Text, Pressable } from 'react-native'
-import { ListItem } from 'react-native-elements/dist/list/ListItem'
+import { Text, View, ScrollView } from 'react-native'
+import LinearGradient from 'react-native-linear-gradient'
 
-export default function LetterDictionary(props) {
-    const [dictionary, setDictionary] = useState([])
-    useEffect(() => {
-        setDictionary(props.vocabularyList)
-        console.log('letterDictionary', dictionary)
-    }, [])
-    if (dictionary.length == 0) return null
-    return (
-        <View style={styles.container}>
-            <ScrollView>
-                {dictionary.map((l, i) => (
-                    <View key={i}>
-                        <Text>{l.vocabulary}</Text>
-                    </View>
-                ))}
-            </ScrollView>
-            <Pressable
-                onPress={() => props.setVisible()}
-            >
-                <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
-        </View >
-    )
+export default class LetterDictionary extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            dictionary: []
+        }
+    }
+    componentDidMount() {
+        this.setState({
+            dictionary: this.props.route.params.dictionary
+        })
+    }
+    render() {
+        if (this.state.dictionary.length === 0)
+            return (
+                <View style={{ flex: 1 }}>
+                    <ActivityIndicator color={'wheat'} size={50} />
+                </View>)
+        return (
+            <LinearGradient colors={['#25283D', '#2C5364']} style={styles.container}>
+                <ScrollView>
+                    {this.state.dictionary.map((l, i) => (
+                        <View key={i} style={styles.listItem}>
+                            <Text style={styles.listItemText}>
+                                {l.vocabulary.charAt(0).toUpperCase() + l.vocabulary.slice(1)}
+                            </Text>
+                            <Text style={{ color: 'white' }}>{l.translate}</Text>
+                        </View>
+                    ))}
+                </ScrollView>
+            </LinearGradient>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'white',
-        marginHorizontal: '10%',
+        flex: 1,
+        paddingTop: 15,
+    },
+    listItem: {
+        borderBottomWidth: 0.25,
+        borderColor: 'white',
+        marginBottom: 5,
+        paddingLeft: 10,
+        paddingVertical: 5,
+    },
+    listItemText: {
+        color: 'wheat',
+        fontWeight: 'bold'
     }
 })
