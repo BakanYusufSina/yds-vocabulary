@@ -157,7 +157,7 @@ export default class VocabularyList extends Component {
                                         selectedVocabulary: { ...l },
                                         showOverlay: true
                                     })
-                                }} iconStyle={{ color: 'darkslategray', fontSize: 18 }} />
+                                }} iconStyle={{ color: 'darkslategray', fontSize: 22 }} />
                             </ListItem>
                         ))}
                     </View>

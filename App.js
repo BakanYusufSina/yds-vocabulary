@@ -8,6 +8,8 @@ import Quiz from './src/pages/Quiz'
 import { SafeAreaView } from 'react-native'
 import Dictionary from './src/pages/Dictionary'
 import LetterDictionary from './src/pages/LetterDictionary'
+import { Icon } from 'react-native-elements'
+import { TextInput } from 'react-native'
 
 const Stack = createStackNavigator()
 

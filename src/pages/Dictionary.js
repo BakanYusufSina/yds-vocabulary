@@ -17,12 +17,13 @@ export default function Dictionary(props) {
     //Get vocabularies from db with letter
     const getLetterDic = async (letter) => {
         let arrayOfLetterVocabulary = []
-        await vocabularies.map((l, i) => {
-            if (l.vocabulary[0] == letter)
-                arrayOfLetterVocabulary.push(l)
-        })
+        if (letter.length <= 1)
+            await vocabularies.map((l, i) => {
+                if (l.vocabulary[0] == letter)
+                    arrayOfLetterVocabulary.push(l)
+            })
         props.navigation.navigate('LetterDictionary', {
-            dictionary: arrayOfLetterVocabulary
+            dictionary: letter.length <= 1 ? arrayOfLetterVocabulary : vocabularies
         })
     }
     useEffect(() => {

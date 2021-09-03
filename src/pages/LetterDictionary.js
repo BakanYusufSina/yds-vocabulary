@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { StyleSheet } from 'react-native'
+import { TouchableHighlight } from 'react-native'
 import { Text, View, ScrollView } from 'react-native'
+import { Icon } from 'react-native-elements'
 import LinearGradient from 'react-native-linear-gradient'
 import Animated from 'react-native-reanimated'
 
@@ -14,6 +16,7 @@ export default class LetterDictionary extends Component {
             scrollY: new Animated.Value(0),
             loadMoreData: false
         }
+        this.scrollRef = createRef()
     }
     componentDidMount() {
         this.setState({
@@ -31,6 +34,12 @@ export default class LetterDictionary extends Component {
                 countOfVocabulary: this.state.countOfVocabulary + 15,
                 loadMoreData: false
             })
+    }
+    scrollUpToTop = () => {
+        this.scrollRef.current.scrollTo({
+            y: 0,
+            animated: true
+        })
     }
     render() {
         if (this.state.dictionary.length === 0)
@@ -59,6 +68,7 @@ export default class LetterDictionary extends Component {
                             this.loadMoreData()
                         }
                     }}
+                    ref={this.scrollRef}
                 >
                     {this.state.dictionary.slice(0, this.state.countOfVocabulary).map((l, i) => (
                         <View key={i} style={styles.listItem}>
@@ -69,8 +79,13 @@ export default class LetterDictionary extends Component {
                         </View>
                     ))}
                     {this.state.loadMoreData === true ?
-                        (<ActivityIndicator color={'wheat'} size={25} />) : <></>}
+                        (<ActivityIndicator color={'wheat'} size={15} />) : <></>}
                 </Animated.ScrollView>
+                <TouchableHighlight style={styles.btnArrowUp}
+                    onPress={this.scrollUpToTop} underlayColor={'darkslategray'}>
+                    <Icon name='arrow-up' type='font-awesome' color='white'
+                        size={20} />
+                </TouchableHighlight>
             </LinearGradient >
         )
     }
@@ -91,5 +106,13 @@ const styles = StyleSheet.create({
     listItemText: {
         color: 'wheat',
         fontWeight: 'bold'
+    },
+    btnArrowUp: {
+        position: 'absolute',
+        right: 10,
+        bottom: 10,
+        backgroundColor: 'darkcyan',
+        padding: 10,
+        borderRadius: 50
     }
 })
