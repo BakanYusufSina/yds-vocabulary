@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { ScrollView } from 'react-native'
 import { Text, View, StyleSheet, TextInput, TouchableHighlight } from 'react-native'
-import { ListItem } from 'react-native-elements'
+import { Icon, ListItem, Overlay } from 'react-native-elements'
 import { openDatabase } from 'react-native-sqlite-storage'
 import LinearGradient from 'react-native-linear-gradient'
 
@@ -21,7 +21,8 @@ export default class Quiz extends Component {
             answerOfUser: '', //Kullanıcının girdiği ceva 
             isCorrect: false, //Cevabın doğruluğunu tutan boolean
             correctAnswersCount: 0, //Doğru cevap sayısı
-            answerList: [] //Kullanıcının cevaplarını tutan dizi
+            answerList: [], //Kullanıcının cevaplarını tutan dizi
+            errorMsgOverlay: false
         }
     }
     //Dizideki elemanları karıştır
@@ -54,6 +55,10 @@ export default class Quiz extends Component {
     }
     //Kullanıcının istediği soru sayısına göre quizi hazırlayan fonksiyon
     getQuiz = async (countQuestions) => {
+        if (countQuestions == 0) {
+            this.setState({ errorMsgOverlay: true })
+            setTimeout(() => this.setState({ errorMsgOverlay: false }), 1500)
+        }
         await this.setState({ questions: this.state.vocabularies.slice(0, countQuestions) })
     }
     //Sorunun doğruluğunu kontrol eden fonksiyon
@@ -218,6 +223,20 @@ export default class Quiz extends Component {
                         </View>
                     )
                 }
+                <Overlay overlayStyle={{ padding: 25 }} visible={this.state.errorMsgOverlay}
+                    onBackdropPress={() => this.setState({ errorMsgOverlay: false })}
+                    animationType='fade'>
+                    <View>
+                        <Icon name='close' size={50} color={'wheat'}
+                            style={{
+                                backgroundColor: 'red', borderRadius: 50,
+                                width: 50, height: 50, alignSelf: 'center',
+                                marginBottom: 15
+                            }} />
+                        <Text>{this.state.vocabularies.length !== 0 ? 'Soru sayısı girmediniz'
+                            : 'Listenize eklendiğiniz kelimeniz yok!'}</Text>
+                    </View>
+                </Overlay>
             </LinearGradient>
         )
     }
