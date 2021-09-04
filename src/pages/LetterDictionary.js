@@ -1,9 +1,9 @@
 import React, { Component, createRef } from 'react'
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator, TextInput } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { TouchableHighlight } from 'react-native'
 import { Text, View, ScrollView } from 'react-native'
-import { Icon } from 'react-native-elements'
+import { Icon, Input } from 'react-native-elements'
 import LinearGradient from 'react-native-linear-gradient'
 import Animated from 'react-native-reanimated'
 
@@ -14,7 +14,9 @@ export default class LetterDictionary extends Component {
             dictionary: [],
             countOfVocabulary: 15,
             scrollY: new Animated.Value(0),
-            loadMoreData: false
+            loadMoreData: false,
+            filteredDictionary: [],
+            filterText: ''
         }
         this.scrollRef = createRef()
     }
@@ -41,7 +43,15 @@ export default class LetterDictionary extends Component {
             animated: true
         })
     }
+    filterDictionary = (filter) => {
+        this.setState({
+            filteredDictionary: this.state.dictionary.filter(i => i.vocabulary.toLowerCase().
+                includes(filter.toLowerCase())), filterText: filter
+        })
+    }
     render() {
+        const dictionary = this.state.filterText == '' ? this.state.dictionary :
+            this.state.filteredDictionary
         if (this.state.dictionary.length === 0)
             return (
                 <View style={{ flex: 1 }}>
@@ -49,6 +59,18 @@ export default class LetterDictionary extends Component {
                 </View>)
         return (
             <LinearGradient colors={['#25283D', '#2C5364']} style={styles.container}>
+                <Input
+                    placeholder='Kelime arayın...'
+                    leftIcon={
+                        <Icon
+                            name='search'
+                            size={18}
+                            color='wheat'
+                        />
+                    }
+                    inputStyle={{ color: 'white', fontSize: 15 }}
+                    onChangeText={(filter) => this.filterDictionary(filter)}
+                />
                 <Animated.ScrollView
                     scrollEventThrottle={16}
                     onScroll={Animated.event(
@@ -70,7 +92,7 @@ export default class LetterDictionary extends Component {
                     }}
                     ref={this.scrollRef}
                 >
-                    {this.state.dictionary.slice(0, this.state.countOfVocabulary).map((l, i) => (
+                    {dictionary.slice(0, this.state.countOfVocabulary).map((l, i) => (
                         <View key={i} style={styles.listItem}>
                             <Text style={styles.listItemText}>
                                 {l.vocabulary.charAt(0).toUpperCase() + l.vocabulary.slice(1)}
@@ -86,7 +108,7 @@ export default class LetterDictionary extends Component {
                     <Icon name='arrow-up' type='font-awesome' color='white'
                         size={20} />
                 </TouchableHighlight>
-            </LinearGradient >
+            </LinearGradient>
         )
     }
 }
