@@ -6,6 +6,7 @@ import {
 import { ListItem, Overlay, Icon, Input } from 'react-native-elements'
 import { openDatabase } from 'react-native-sqlite-storage'
 import LinearGradient from 'react-native-linear-gradient'
+import extractExcel from './extractExcel'
 
 let db = openDatabase({
     name: 'yds',
@@ -47,6 +48,7 @@ export default class VocabularyList extends Component {
                     if (a.vocabulary > b.vocabulary) return 1
                 })
                 this.setState({ vocabularies: [...arrayOfVocabulary] })
+                extractExcel.handle(arrayOfVocabulary)
             }, (err) => console.log(err))
         })
     }

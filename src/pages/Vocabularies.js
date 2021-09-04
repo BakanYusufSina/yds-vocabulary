@@ -3,9 +3,11 @@ import { Dimensions } from 'react-native'
 import { TouchableHighlight } from 'react-native'
 import { Text, View, StyleSheet } from 'react-native'
 import { Overlay } from 'react-native-elements'
+import { Icon } from 'react-native-elements/dist/icons/Icon'
 import LinearGradient from 'react-native-linear-gradient'
 import AddVocabulary from '../partials/AddVocabulary'
 import VocabularyList from '../partials/VocabularyList'
+import ActionButton from '@logvinme/react-native-action-button'
 
 export default function Vocabularies() {
     const [showOverlay, setShowOverlay] = useState(false)
@@ -15,10 +17,17 @@ export default function Vocabularies() {
             <VocabularyList updateList={refreshList} />
             {/*KELİME EKLEME BUTONU*/}
             <>
-                <TouchableHighlight style={styles.addBtn} onPress={() => setShowOverlay(true)}
-                    underlayColor={'#EFD9CE'}>
-                    <Text style={styles.addBtnText}>+</Text>
-                </TouchableHighlight>
+                <ActionButton buttonColor="rgba(231,76,60,1)" useNativeFeedback={false}
+                    offsetX={10} offsetY={10}>
+                    <ActionButton.Item buttonColor='#9b59b6' title="Excel'e Aktar" onPress={() => console.log("notes tapped!")}
+                        useNativeFeedback={false} style={styles.acBtn}>
+                        <Icon name="file-excel-o" type='font-awesome' size={22} />
+                    </ActionButton.Item>
+                    <ActionButton.Item buttonColor='#3498db' title="Kelime Ekle" onPress={() => setShowOverlay(true)}
+                        useNativeFeedback={false} style={styles.acBtn}>
+                        <Icon name="plus" type='font-awesome' size={22} />
+                    </ActionButton.Item>
+                </ActionButton>
                 <Overlay visible={showOverlay}
                     onBackdropPress={() => setShowOverlay(false)}
                     overlayStyle={{ width: '85%', backgroundColor: '#25283D' }}>
@@ -38,20 +47,4 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white'
     },
-    addBtn: {
-        position: 'absolute',
-        bottom: 10,
-        borderWidth: 0.25,
-        borderRadius: 50,
-        alignItems: 'center',
-        width: 60,
-        height: 60,
-        justifyContent: 'center',
-        backgroundColor: '#EFD9CE',
-        right: (Dimensions.get('screen').width - 60) / 2
-    },
-    addBtnText: {
-        fontSize: 26,
-        color: 'darkslategray'
-    }
 })
