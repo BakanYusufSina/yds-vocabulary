@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableHighlight, Alert } from 'react-native'
-import { Input } from 'react-native-elements'
+import { Icon, Input } from 'react-native-elements'
+import { Overlay } from 'react-native-elements/dist/overlay/Overlay'
 import { openDatabase } from 'react-native-sqlite-storage'
 
 export default function AddVocabulary(props) {
     const [vocabulary, setVocabulary] = useState('')
     const [translate, setTranslate] = useState('')
+    const [doneOverlay, setDoneOverlay] = useState(false)
     const addNewVocabulary = () => {
         const db = openDatabase({
             name: 'yds',
@@ -16,24 +18,19 @@ export default function AddVocabulary(props) {
                 tx.executeSql('INSERT INTO yds(vocabulary, translate) VALUES("' + vocabulary.toLowerCase().trim() + '","'
                     + translate.toLowerCase().trim() + '")', [], (tx, results) => {
                         if (results.rowsAffected > 0) {
-                            Alert.alert(
-                                'Başarılı',
-                                'Kelime Kaydedildi',
-                                [
-                                    {
-                                        text: 'Tamam',
-                                    },
-                                ],
-                                { cancelable: false }
-                            );
-                            props.showOverlay()
-                            props.isAdded()
+                            setDoneOverlay(true)
+                            setTimeout(() => {
+                                setDoneOverlay(false)
+                                props.showOverlay()
+                                props.isAdded()
+                            }, 1000)
                         }
                     }, (err) => console.log(err))
             })
         }
         else {
-            Alert.alert('Lütfen boş alan bırakmayınız!')
+            setDoneOverlay(true)
+            setTimeout(() => setDoneOverlay(false), 1000)
         }
 
     }
@@ -67,6 +64,18 @@ export default function AddVocabulary(props) {
                     fontWeight: 'bold'
                 }}>KAYDET</Text>
             </TouchableHighlight>
+            <Overlay overlayStyle={{ alignItems: 'center', padding: 25 }}
+                visible={doneOverlay}>
+                <Icon name={(vocabulary != '' && translate != '') ? 'done' : 'close'}
+                    style={{
+                        backgroundColor: (vocabulary != '' && translate != '') ? 'darkcyan' : 'darkred',
+                        borderRadius: 50, width: 50, height: 50, marginBottom: 15
+                    }}
+                    color='wheat' size={50} />
+                <Text style={{ fontWeight: 'bold', letterSpacing: 1 }}>
+                    {(vocabulary != '' && translate != '') ? 'Kelimeniz kaydedildi' :
+                        'Lütfen boş alan bırakmayınız'}</Text>
+            </Overlay>
         </View>
     )
 }
