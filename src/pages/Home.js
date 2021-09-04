@@ -52,6 +52,14 @@ export default function Home(props) {
                     </>
                 </TouchableHighlight>
             </View>
+            <View style={{
+                position: 'absolute', alignSelf: 'center',
+                top: 60, alignItems: 'center', flexDirection: 'row'
+            }}>
+                <Icon name='book' type='font-awesome' color={'#BFD8B8'}
+                    size={60} />
+                <Text style={styles.iconText}>YDS</Text>
+            </View>
         </LinearGradient >
     )
 }
@@ -76,5 +84,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 15,
         marginTop: 10
+    },
+    iconText: {
+        color: 'darkcyan',
+        marginLeft: 18,
+        fontFamily: 'monospace',
+        fontSize: 25,
+        fontWeight: 'bold',
+        letterSpacing: 2,
+        fontStyle: 'italic'
     }
 })
