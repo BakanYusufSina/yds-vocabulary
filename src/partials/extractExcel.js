@@ -3,7 +3,6 @@ var RNFS = require('react-native-fs')
 import XLSX from 'xlsx'
 
 module.exports.handle = async (vocabularies) => {
-    console.log('excel');
     // function to handle exporting
     try {
         // Check for Permission (check if permission is already given or not)
@@ -25,7 +24,7 @@ module.exports.handle = async (vocabularies) => {
 
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 // Permission Granted (calling our exportDataToExcel function)
-                exportDataToExcel();
+                exportDataToExcel(vocabularies);
                 console.log("Permission granted");
             } else {
                 // Permission denied
@@ -33,7 +32,9 @@ module.exports.handle = async (vocabularies) => {
             }
         } else {
             // Already have Permission (calling our exportDataToExcel function)
-            exportDataToExcel(vocabularies);
+            await exportDataToExcel(vocabularies)
+            return true
+
         }
     } catch (e) {
         console.log('Error while checking permission');
