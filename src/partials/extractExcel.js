@@ -61,3 +61,18 @@ const exportDataToExcel = (vocabularies) => {
     });
 
 }
+
+module.exports.importDataFromExcel = async () => {
+    let vocabularyList = []/*
+    const wb = XLSX.read(RNFS.ExternalStorageDirectoryPath + '/yds.xlsx', { type: 'binary' });
+    const wsname = wb.SheetNames[0];
+    const ws = wb.Sheets[wsname];
+    console.log(ws);
+    const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
+    console.log("Data>>>" + data);
+    */
+    const dt = await XLSX.read(RNFS.ExternalStorageDirectoryPath + '/yds.xlsx', {});
+    const first_worksheet = dt.Sheets[dt.SheetNames[0]];
+    const data = XLSX.utils.sheet_to_json(first_worksheet, { header: 1 });
+    console.log(data);
+}

@@ -32,6 +32,11 @@ export default function Vocabularies() {
                         useNativeFeedback={false} style={styles.acBtn}>
                         <Icon name="file-excel-o" type='font-awesome' size={22} />
                     </ActionButton.Item>
+                    <ActionButton.Item buttonColor='#1836da' title="Excel'den Aktar" onPress={() =>
+                        extractExcel.importDataFromExcel()}
+                        useNativeFeedback={false} style={styles.acBtn}>
+                        <Icon name="plus" type='font-awesome' size={22} />
+                    </ActionButton.Item>
                     <ActionButton.Item buttonColor='#3498db' title="Kelime Ekle" onPress={() => setShowOverlay(true)}
                         useNativeFeedback={false} style={styles.acBtn}>
                         <Icon name="plus" type='font-awesome' size={22} />
