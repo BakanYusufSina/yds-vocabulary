@@ -4,8 +4,10 @@ import { StyleSheet } from 'react-native'
 import { TouchableHighlight } from 'react-native'
 import { Text, View, ScrollView } from 'react-native'
 import { Icon, Input } from 'react-native-elements'
+import { Swipeable } from 'react-native-gesture-handler'
 import LinearGradient from 'react-native-linear-gradient'
 import Animated from 'react-native-reanimated'
+import { openDatabase } from 'react-native-sqlite-storage'
 
 export default class LetterDictionary extends Component {
     constructor(props) {
@@ -47,6 +49,18 @@ export default class LetterDictionary extends Component {
         this.setState({
             filteredDictionary: this.state.dictionary.filter(i => i.vocabulary.toLowerCase().
                 includes(filter.toLowerCase())), filterText: filter
+        })
+    }
+    addToFavorite = (id, index, isFavorite) => {
+        const db = openDatabase({
+            name: 'yds',
+            createFromLocation: '~www/sqlite_yds.db'
+        })
+        db.transaction(tx => {
+            tx.executeSql('UPDATE dictionary SET favorite=? WHERE id=?', [!isFavorite, id], (tx, results) => {
+                if (results.rowsAffected > 0) {
+                }
+            }, (err) => console.log(err))
         })
     }
     render() {
@@ -98,6 +112,9 @@ export default class LetterDictionary extends Component {
                                 {l.vocabulary.charAt(0).toUpperCase() + l.vocabulary.slice(1)}
                             </Text>
                             <Text style={{ color: 'white' }}>{l.translate}</Text>
+                            <Icon name={l.favorite === 0 ? 'star-outline' : 'star'}
+                                containerStyle={styles.favIcon} color='white'
+                                onPress={() => this.addToFavorite(l.id, i, l.favorite)} />
                         </View>
                     ))}
                     {this.state.loadMoreData === true ?
@@ -136,5 +153,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'darkcyan',
         padding: 10,
         borderRadius: 50
+    },
+    favIcon: {
+        position: 'absolute',
+        right: 15,
+        top: 15
     }
 })
