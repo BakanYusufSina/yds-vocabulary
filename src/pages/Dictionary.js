@@ -9,7 +9,7 @@ export default function Dictionary(props) {
     const [vocabularies, setVocabularies] = useState([])//All vocabularies
     //Alphabet array
     const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p",
-        "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Tüm Liste"];
+        "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Tüm Liste", "Favoriler"];
     const db = openDatabase({
         name: 'yds',
         createFromLocation: '~www/sqlite_yds.db'
@@ -17,16 +17,27 @@ export default function Dictionary(props) {
     //Get vocabularies from db with letter
     const getLetterDic = async (letter) => {
         let arrayOfLetterVocabulary = []
+        console.log(letter);
+        if (letter == 'Favoriler') {
+            await vocabularies.map((l, i) => {
+                if (l.favorite == 1)
+                    arrayOfLetterVocabulary.push(l)
+            })
+        }
         if (letter.length <= 1)
             await vocabularies.map((l, i) => {
                 if (l.vocabulary[0] == letter)
                     arrayOfLetterVocabulary.push(l)
             })
         props.navigation.navigate('LetterDictionary', {
-            dictionary: letter.length <= 1 ? arrayOfLetterVocabulary : vocabularies
+            dictionary: letter.length && letter !== 'Favoriler' <= 1 ? arrayOfLetterVocabulary
+                : vocabularies
         })
     }
     useEffect(() => {
+        getList()
+    }, [])
+    const getList = () => {
         db.transaction(tx => {
             tx.executeSql('SELECT * FROM dictionary', [], (tx, results) => {
                 let arrayOfVocabulary = []
@@ -37,7 +48,10 @@ export default function Dictionary(props) {
                 setVocabularies([...arrayOfVocabulary])
             })
         }, (err) => console.log(err))
-    }, [])
+    }
+    const updateList = () => {
+        getList()
+    }
     if (vocabularies.length === 0) return (
         <LinearGradient colors={['#25283D', '#2C5364']} style={styles.container}>
         </LinearGradient>)
