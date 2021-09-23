@@ -65,11 +65,22 @@ export default class LetterDictionary extends Component {
     render() {
         const dictionary = this.state.filterText == '' ? this.state.dictionary :
             this.state.filteredDictionary
-        if (this.state.dictionary.length === 0)
-            return (
-                <View style={{ flex: 1 }}>
-                    <ActivityIndicator color={'wheat'} size={50} />
-                </View>)
+        if (this.state.dictionary.length === 0) {
+            if (this.props.route.params.letter == 'Favoriler')
+                return (
+                    <LinearGradient colors={['#25283D', '#2C5364']} style={{
+                        flex: 1,
+                        justifyContent: 'center', alignItems: 'center'
+                    }}>
+                        <Text style={{color: 'white', fontSize: 18}}>Favori kelimeniz yok</Text>
+                    </LinearGradient>
+                )
+            else
+                return (
+                    <View style={{ flex: 1 }}>
+                        <ActivityIndicator color={'wheat'} size={50} />
+                    </View>)
+        }
         return (
             <LinearGradient colors={['#25283D', '#2C5364']} style={styles.container}>
                 <Input

@@ -24,14 +24,14 @@ export default function Dictionary(props) {
                     arrayOfLetterVocabulary.push(l)
             })
         }
-        if (letter.length <= 1)
+        else if (letter.length <= 1)
             await vocabularies.map((l, i) => {
                 if (l.vocabulary[0] == letter)
                     arrayOfLetterVocabulary.push(l)
             })
         props.navigation.navigate('LetterDictionary', {
-            dictionary: letter.length && letter !== 'Favoriler' <= 1 ? arrayOfLetterVocabulary
-                : vocabularies
+            dictionary: letter.length <= 1 || letter == 'Favoriler' ? arrayOfLetterVocabulary
+                : vocabularies, letter
         })
     }
     useEffect(() => {
