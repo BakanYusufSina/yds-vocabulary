@@ -1,5 +1,5 @@
 import { PermissionsAndroid } from 'react-native'
-var RNFS = require('react-native-fs')
+const RNFS = require('react-native-fs')
 import XLSX from 'xlsx'
 
 module.exports.handle = async (vocabularies) => {
@@ -54,9 +54,10 @@ const exportDataToExcel = (vocabularies) => {
     const wbout = XLSX.write(wb, { type: 'binary', bookType: "xlsx" })
 
     // Write generated excel to Storage
-    RNFS.writeFile(RNFS.ExternalStorageDirectoryPath + '/yds.xlsx', wbout, 'ascii').then((r) => {
+    RNFS.writeFile(RNFS.DownloadDirectoryPath + '/yds.xlsx', wbout, 'ascii').then((r) => {
         console.log('Success')
     }).catch((e) => {
+        console.log('hata');
         console.log('Error', e)
     });
 
