@@ -1,7 +1,8 @@
 import React, { Component, useEffect, useState } from 'react'
 import {
     View, Text, ScrollView, Alert, TextInput, TouchableHighlight,
-    RefreshControl
+    RefreshControl,
+    StyleSheet
 } from 'react-native'
 import { ListItem, Overlay, Icon, Input } from 'react-native-elements'
 import { openDatabase } from 'react-native-sqlite-storage'
@@ -143,6 +144,7 @@ export default class VocabularyList extends Component {
                     <View>
                         {vocabulariesList.map((l, i) => (
                             <ListItem key={i}
+                                containerStyle={styles.listItem}
                                 linearGradientProps={{
                                     colors: ['#07BEB8', '#EFD9CE'],
                                     start: { x: 1, y: 0 },
@@ -170,23 +172,12 @@ export default class VocabularyList extends Component {
                                 {this.state.isEditing ?
                                     <View>
                                         <TextInput defaultValue={this.state.selectedVocabulary.vocabulary}
-                                            style={{
-                                                borderBottomWidth: 0.5, borderBottomColor: 'wheat',
-                                                color: 'white', fontSize: 15
-                                            }}
+                                            style={styles.input}
                                             onChangeText={(val) => this.setState({ editedVocabulary: val })} />
                                         <TextInput defaultValue={this.state.selectedVocabulary.translate}
-                                            style={{
-                                                borderBottomWidth: 0.5, borderBottomColor: 'wheat',
-                                                color: 'white', fontSize: 15
-                                            }}
+                                            style={styles.input}
                                             onChangeText={(val) => this.setState({ editedTranslate: val })} />
-                                        <TouchableHighlight style={{
-                                            width: '75%',
-                                            alignSelf: 'center', alignItems: 'center',
-                                            backgroundColor: 'wheat', paddingVertical: 10,
-                                            borderRadius: 3, marginTop: 10
-                                        }} onPress={() => this.editVocabulary()} underlayColor={'white'}>
+                                        <TouchableHighlight style={styles.editBtn} onPress={() => this.editVocabulary()} underlayColor={'white'}>
                                             <Text style={{ color: 'darkslategray', fontWeight: 'bold' }}>
                                                 GÜNCELLE</Text>
                                         </TouchableHighlight>
@@ -205,9 +196,9 @@ export default class VocabularyList extends Component {
                                     flexDirection: 'row', position: 'absolute',
                                     right: 0
                                 }}>
-                                    <Icon name='delete' type='Ionicon' size={22} color='red'
+                                    <Icon name='delete' type='Ionicon' size={25} color='red'
                                         onPress={() => this.deleteVocabulary()} />
-                                    <Icon name='edit' type='Ionicon' size={22} color='darkcyan'
+                                    <Icon name='edit' type='Ionicon' size={25} color='darkcyan'
                                         onPress={() => this.setState({ isEditing: !this.state.isEditing })} />
                                 </View>
                             </View>
@@ -218,3 +209,23 @@ export default class VocabularyList extends Component {
         )
     }
 }
+
+const styles = StyleSheet.create({
+    input: {
+        borderBottomWidth: 0.5, borderBottomColor: 'wheat',
+        color: 'white', fontSize: 15
+    },
+    editBtn: {
+        width: '75%',
+        alignSelf: 'center', alignItems: 'center',
+        backgroundColor: 'wheat', paddingVertical: 10,
+        borderRadius: 3, marginTop: 10
+    },
+    listItem: {
+        paddingVertical: 7,
+        paddingHorizontal: 10,
+        marginHorizontal: '2.5%',
+        borderRadius: 5,
+        marginBottom: 5
+    }
+})
