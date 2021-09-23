@@ -63,7 +63,7 @@ const exportDataToExcel = (vocabularies) => {
 
 }
 
-module.exports.importDataFromExcel = async () => {
+module.exports.importDataFromExcel = async (fileData) => {
     let vocabularyList = []/*
     const wb = XLSX.read(RNFS.ExternalStorageDirectoryPath + '/yds.xlsx', { type: 'binary' });
     const wsname = wb.SheetNames[0];
@@ -72,8 +72,17 @@ module.exports.importDataFromExcel = async () => {
     const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
     console.log("Data>>>" + data);
     */
-    const dt = await XLSX.read(RNFS.ExternalStorageDirectoryPath + '/yds.xlsx', {});
-    const first_worksheet = dt.Sheets[dt.SheetNames[0]];
-    const data = XLSX.utils.sheet_to_json(first_worksheet, { header: 1 });
-    console.log(data);
+    const excelFile = await RNFS.readFile(fileData.uri, 'ascii');
+    const wb = XLSX.read(excelFile, { type: 'binary' });
+    const wsname = wb.SheetNames[0];
+    const ws = wb.Sheets[wsname];
+    console.log(ws);
+    const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
+    console.log("Data>>>" + data);
+    /*
+        const dt = await XLSX.read(fileData.uri, {});
+        const first_worksheet = dt.Sheets[dt.SheetNames[0]];
+        const data = XLSX.utils.sheet_to_json(first_worksheet, { header: 1 });
+        console.log(data);
+        */
 }

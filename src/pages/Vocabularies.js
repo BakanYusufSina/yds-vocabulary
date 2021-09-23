@@ -9,6 +9,7 @@ import AddVocabulary from '../partials/AddVocabulary'
 import VocabularyList from '../partials/VocabularyList'
 import ActionButton from '@logvinme/react-native-action-button'
 import extractExcel from '../partials/extractExcel'
+import PickFile from '../partials/PickFile'
 
 export default function Vocabularies() {
     const [showOverlay, setShowOverlay] = useState(false)
@@ -32,8 +33,10 @@ export default function Vocabularies() {
                         useNativeFeedback={false} style={styles.acBtn}>
                         <Icon name="file-excel-o" type='font-awesome' size={22} />
                     </ActionButton.Item>
-                    <ActionButton.Item buttonColor='#1836da' title="Excel'den Aktar" onPress={() =>
-                        extractExcel.importDataFromExcel()}
+                    <ActionButton.Item buttonColor='#1836da' title="Excel'den Aktar" onPress={async () => {
+                        const fileData = await PickFile()
+                        extractExcel.importDataFromExcel(fileData)
+                    }}
                         useNativeFeedback={false} style={styles.acBtn}>
                         <Icon name="plus" type='font-awesome' size={22} />
                     </ActionButton.Item>
