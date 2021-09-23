@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableHighlight, ActivityIndicator } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { Icon, Input } from 'react-native-elements'
@@ -15,13 +15,16 @@ export default function DictionaryList(props) {
     //Favorite
     const addToFavorite = (id, index, isFavorite) => {
         db.transaction(tx => {
-            tx.executeSql('UPDATE dictionary SET favorite=? WHERE id=?', [!isFavorite, id], (tx, results) => {
+            tx.executeSql('UPDATE dictionary SET favorite=? WHERE id=?', [!isFavorite, id], async (tx, results) => {
                 if (results.rowsAffected > 0) {
-                    props.refresh(props.letter)
+                    await props.refresh(props.letter)
                 }
             }, (err) => console.log(err))
         })
     }
+    useEffect(() => {
+        setDictionary(props.dictionary)
+    }, [props.dictionary])
     //Filter list
     const filterDictionary = (filter) => {
         setFiltered(dictionary.filter(i => i.vocabulary.toLowerCase().
@@ -46,6 +49,7 @@ export default function DictionaryList(props) {
             animated: true
         })
     }
+    const listOfDictionary = filterText == '' ? dictionary : filteredDictionary
     return (
         <>
             <Input
@@ -81,7 +85,7 @@ export default function DictionaryList(props) {
                 }}
                 ref={scrollRef}
             >
-                {dictionary.slice(0, countOfVocabulary).map((l, i) => (
+                {listOfDictionary.slice(0, countOfVocabulary).map((l, i) => (
                     <View key={i} style={styles.listItem}>
                         <Text style={styles.listItemText}>
                             {l.vocabulary.charAt(0).toUpperCase() + l.vocabulary.slice(1)}

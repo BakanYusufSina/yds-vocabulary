@@ -73,14 +73,20 @@ export default class LetterDictionary extends Component {
                 )
             else
                 return (
-                    <View style={{ flex: 1 }}>
-                        <ActivityIndicator color={'wheat'} size={50} />
-                    </View>)
+                    <LinearGradient colors={['#25283D', '#2C5364']} style={styles.container}>
+                        <ActivityIndicator color={'wheat'} size={30} />
+                        <Text style={{
+                            color: 'white', alignSelf: 'center',
+                            marginTop: 10
+                        }}>Yükleniyor...</Text>
+                    </LinearGradient>)
         }
         return (
             <LinearGradient colors={['#25283D', '#2C5364']} style={styles.container}>
                 <DictionaryList dictionary={this.state.dictionary} db={this.state.db}
-                    refresh={(letter) => this.getList(letter)} letter={this.props.route.params.letter} />
+                    refresh={async (letter) => {
+                        await this.getList(letter)
+                    }} letter={this.props.route.params.letter} />
             </LinearGradient>
         )
     }
