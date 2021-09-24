@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { View, Text, TouchableHighlight, Alert } from 'react-native'
 import { Icon, Input } from 'react-native-elements'
 import { Overlay } from 'react-native-elements/dist/overlay/Overlay'
@@ -8,6 +8,7 @@ export default function AddVocabulary(props) {
     const [vocabulary, setVocabulary] = useState('')
     const [translate, setTranslate] = useState('')
     const [doneOverlay, setDoneOverlay] = useState(false)
+    let secondTextInput = useRef()
     const addNewVocabulary = () => {
         const db = openDatabase({
             name: 'yds',
@@ -42,7 +43,8 @@ export default function AddVocabulary(props) {
                 onChangeText={val => setVocabulary(val)}
                 labelStyle={{ color: 'wheat' }}
                 inputStyle={{ color: 'white', fontSize: 14 }}
-                autoFocus value={vocabulary.trimLeft()}>
+                autoFocus value={vocabulary.trimLeft()}
+                onSubmitEditing={() => { secondTextInput.focus(); }}>
             </Input>
             <Input
                 containerStyle={{ width: '100%' }}
@@ -50,7 +52,8 @@ export default function AddVocabulary(props) {
                 onChangeText={val => setTranslate(val)}
                 labelStyle={{ color: 'wheat' }}
                 inputStyle={{ color: 'white', fontSize: 14 }}
-                value={translate.trimLeft()}>
+                value={translate.trimLeft()}
+                ref={(input) => { secondTextInput = input; }}>
             </Input>
             <TouchableHighlight style={{
                 marginHorizontal: '15%',

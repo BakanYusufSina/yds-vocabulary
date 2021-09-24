@@ -1,4 +1,5 @@
 import { PermissionsAndroid } from 'react-native'
+import { openDatabase } from 'react-native-sqlite-storage';
 const RNFS = require('react-native-fs')
 import XLSX from 'xlsx'
 
@@ -64,25 +65,42 @@ const exportDataToExcel = (vocabularies) => {
 }
 
 module.exports.importDataFromExcel = async (fileData) => {
-    let vocabularyList = []/*
-    const wb = XLSX.read(RNFS.ExternalStorageDirectoryPath + '/yds.xlsx', { type: 'binary' });
-    const wsname = wb.SheetNames[0];
-    const ws = wb.Sheets[wsname];
-    console.log(ws);
-    const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
-    console.log("Data>>>" + data);
-    */
-    const excelFile = await RNFS.readFile(fileData.uri, 'ascii');
-    const wb = XLSX.read(excelFile, { type: 'binary' });
-    const wsname = wb.SheetNames[0];
-    const ws = wb.Sheets[wsname];
-    console.log(ws);
-    const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
-    console.log("Data>>>" + data);
-    /*
-        const dt = await XLSX.read(fileData.uri, {});
-        const first_worksheet = dt.Sheets[dt.SheetNames[0]];
-        const data = XLSX.utils.sheet_to_json(first_worksheet, { header: 1 });
-        console.log(data);
-        */
+    const excelFile = await RNFS.readFile(fileData.uri, 'ascii')
+    const wb = XLSX.read(excelFile, { type: 'binary' })
+    const wsname = wb.SheetNames[0]
+    const ws = wb.Sheets[wsname]
+    const data = XLSX.utils.sheet_to_json(ws, {
+        header: 1,
+        raw: false, blankrows: false
+    })
+    const arrayOfExcel = await excelToArray(data)//Set excel data to array
+    const importExcelDatasToDB = await importToDB(arrayOfExcel)
+    return importExcelDatasToDB
+}
+
+const excelToArray = (excelData) => {
+    let arrayOfExcel = []
+    for (let i = 1; i < excelData.length; i++)
+        arrayOfExcel.push({
+            vocabulary: excelData[i][1],
+            translate: excelData[i][0]
+        })
+    return arrayOfExcel
+}
+
+const importToDB = async (arrayExcelData) => {
+    const db = openDatabase({
+        name: 'yds',
+        createFromLocation: '~www/sqlite_yds.db'
+    })
+    if (arrayExcelData.length != 0)
+        await db.transaction(tx => {
+            arrayExcelData.map((l, i) => {
+                tx.executeSql('INSERT OR IGNORE INTO yds(vocabulary, translate) VALUES(?,?)',
+                    [l.vocabulary.toLowerCase().trim(), l.translate.toLowerCase().trim()], (tx, results) => {
+                    }, (err) => console.log(err))
+            })
+
+        })
+    return true
 }

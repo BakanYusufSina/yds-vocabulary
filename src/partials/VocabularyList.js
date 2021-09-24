@@ -135,7 +135,7 @@ export default class VocabularyList extends Component {
                                 marginBottom: '6%',
                                 height: 36
                             }}
-                            inputStyle={{ color: 'white' }}
+                            inputStyle={{ color: 'white', fontSize: 15 }}
                             onChangeText={async (val) => {
                                 await this.setState({ filterText: val })
                                 this.filterVocabularies()

@@ -23,26 +23,31 @@ export default function Vocabularies() {
             {/*KELİME EKLEME BUTONU*/}
             <>
                 <ActionButton buttonColor="rgba(231,76,60,1)" useNativeFeedback={false}
-                    offsetX={10} offsetY={10}>
-                    <ActionButton.Item buttonColor='#9b59b6' title="Excel'e Aktar"
+                    offsetX={10} offsetY={10} size={50}>
+                    <ActionButton.Item buttonColor='darkcyan' title="Excel'e Aktar"
                         onPress={() => {
                             extractExcel.handle(extractExcelData)
                             setExcelVisible(true)
                             setTimeout(() => setExcelVisible(false), 2000)
                         }}
-                        useNativeFeedback={false} style={styles.acBtn}>
-                        <Icon name="file-excel-o" type='font-awesome' size={22} />
+                        useNativeFeedback={false} style={styles.acBtn} size={45}>
+                        <Icon name="file-excel-o" type='font-awesome' size={18} color='white' />
                     </ActionButton.Item>
-                    <ActionButton.Item buttonColor='#1836da' title="Excel'den Aktar" onPress={async () => {
+                    <ActionButton.Item buttonColor='darkslategray' title="Excel'den Aktar" onPress={async () => {
                         const fileData = await PickFile()
-                        extractExcel.importDataFromExcel(fileData)
+                        let isDone = null
+                        if (fileData)
+                            isDone = await extractExcel.importDataFromExcel(fileData)
+                        console.log(isDone)
+                        setRefresh(true)
+                        setTimeout(() => setRefresh(false), 500)
                     }}
-                        useNativeFeedback={false} style={styles.acBtn}>
-                        <Icon name="plus" type='font-awesome' size={22} />
+                        useNativeFeedback={false} style={styles.acBtn} size={45}>
+                        <Icon name="list" type='font-awesome' size={18} color='white' />
                     </ActionButton.Item>
-                    <ActionButton.Item buttonColor='#3498db' title="Kelime Ekle" onPress={() => setShowOverlay(true)}
-                        useNativeFeedback={false} style={styles.acBtn}>
-                        <Icon name="plus" type='font-awesome' size={22} />
+                    <ActionButton.Item buttonColor='darkred' title="Kelime Ekle" onPress={() => setShowOverlay(true)}
+                        useNativeFeedback={false} style={styles.acBtn} size={45}>
+                        <Icon name="plus" type='font-awesome' size={18} color='white' />
                     </ActionButton.Item>
                 </ActionButton>
                 <Overlay visible={showOverlay}

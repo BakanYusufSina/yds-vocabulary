@@ -16,7 +16,7 @@ export default function Home(props) {
     useEffect(() => {
         db.transaction(tx => {
             tx.executeSql('CREATE TABLE IF NOT EXISTS yds(id INTEGER PRIMARY KEY AUTOINCREMENT,' +
-                'vocabulary text,translate text)', [])
+                'vocabulary text UNIQUE,translate text)', [])
         })
     }, [])
     return (
