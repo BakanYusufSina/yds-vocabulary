@@ -8,8 +8,6 @@ import Quiz from './src/pages/Quiz'
 import { SafeAreaView } from 'react-native'
 import Dictionary from './src/pages/Dictionary'
 import LetterDictionary from './src/pages/LetterDictionary'
-import { Icon } from 'react-native-elements'
-import { TextInput } from 'react-native'
 
 const Stack = createStackNavigator()
 
@@ -21,11 +19,10 @@ const options = {
 export default class App extends Component {
   render() {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: 'black' }}>
         <NavigationContainer theme={{ colors: { background: 'black' } }}>
           <Stack.Navigator initialRouteName="Home" detachInactiveScreens={false}
-            screenOptions={
-              { cardStyle: { opacity: 1, backgroundColor: 'black' } }}>
+            screenOptions={{ cardStyle: { opacity: 1, backgroundColor: 'black' } }}>
             <Stack.Screen name="Home" component={Home}
               options={{ headerShown: false }} />
             <Stack.Screen name='Vocabularies' component={Vocabularies}

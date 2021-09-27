@@ -4,6 +4,7 @@ import { Text, View, StyleSheet, TextInput, TouchableHighlight } from 'react-nat
 import { Icon, ListItem, Overlay } from 'react-native-elements'
 import { openDatabase } from 'react-native-sqlite-storage'
 import LinearGradient from 'react-native-linear-gradient'
+import QuizWithChoose from '../partials/QuizWithChoose'
 
 let db = openDatabase({
     name: 'yds',
@@ -192,7 +193,10 @@ export default class Quiz extends Component {
                                 </>
                             )}
                         </>
-                    ) : (
+                    ) : (<QuizWithChoose questionCount={this.state.countOfQuestions}
+                        questions={this.state.questions} />
+                    )}
+                {/*
                         <View style={{ marginTop: 30 }}>
                             <Text style={{
                                 alignSelf: 'center', fontWeight: 'bold',
@@ -220,9 +224,7 @@ export default class Quiz extends Component {
                             }} underlayColor={'none'}>
                                 <Text style={{ color: 'white', fontWeight: 'bold' }}>CEVAPLA</Text>
                             </TouchableHighlight>
-                        </View>
-                    )
-                }
+                        </View>*/}
                 <Overlay overlayStyle={{ padding: 25 }} visible={this.state.errorMsgOverlay}
                     onBackdropPress={() => this.setState({ errorMsgOverlay: false })}
                     animationType='fade'>
