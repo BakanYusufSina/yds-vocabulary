@@ -1,7 +1,8 @@
-import { PermissionsAndroid } from 'react-native'
-import { openDatabase } from 'react-native-sqlite-storage';
+import { PermissionsAndroid, Platform } from 'react-native'
+import { openDatabase } from 'react-native-sqlite-storage'
 const RNFS = require('react-native-fs')
 import XLSX from 'xlsx'
+import PushNotification from 'react-native-push-notification'
 
 module.exports.handle = async (vocabularies) => {
     // function to handle exporting
@@ -44,6 +45,43 @@ module.exports.handle = async (vocabularies) => {
     }
 }
 
+PushNotification.configure({
+    onRegister: function (token) {
+        console.log('onRegister token:', token);
+    },
+    popInitialNotification: true,// This line solves the problem that I was facing.
+    requestPermissions: Platform.OS === 'ios'
+});
+
+const userNowInactive = () => {
+    showNotification();
+}
+
+const showNotification = (title, message,) => {
+    console.log("Notification")
+    PushNotification.localNotification({
+        title: title,
+        message: message,
+        playSound: true,
+        channelId: 123,
+        autoCancel: true,
+        vibrate: true,
+        vibration: 300,
+        priority: 'high',
+    });
+};
+PushNotification.createChannel(
+    {
+        channelId: 123, // (required)
+        channelName: "TodoYumak", // (required)
+        playSound: true,
+        soundName: 'f1', // (optional) See `soundName` parameter of `localNotification` function
+        importance: 4, // (optional) default: 4. Int value of the Android notification importance
+        vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
+    },
+    //(created) => console.log(`createChannel returned '${created}'`) / / (optional) callback returns whether the channel was created, false means it already existed.
+);
+
 const exportDataToExcel = (vocabularies) => {
 
     // Created Sample data
@@ -57,11 +95,11 @@ const exportDataToExcel = (vocabularies) => {
     // Write generated excel to Storage
     RNFS.writeFile(RNFS.DownloadDirectoryPath + '/yds.xlsx', wbout, 'ascii').then((r) => {
         console.log('Success')
+        showNotification("Deneme", "Altyazı")
     }).catch((e) => {
         console.log('hata');
         console.log('Error', e)
     });
-
 }
 
 module.exports.importDataFromExcel = async (fileData) => {

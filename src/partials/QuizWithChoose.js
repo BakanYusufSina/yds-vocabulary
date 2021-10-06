@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TouchableHighlight, ActivityIndicator } from 'react-native'
 import { openDatabase } from 'react-native-sqlite-storage'
 
 export default function QuizWithChoose(props) {
@@ -11,7 +11,7 @@ export default function QuizWithChoose(props) {
         name: 'yds',
         createFromLocation: '~www/sqlite_yds.db'
     })
-    useEffect(() => {
+    useEffect(async () => {
         db.transaction(tx => {
             tx.executeSql('SELECT translate FROM dictionary ORDER BY random() LIMIT 10',
                 [],
@@ -22,42 +22,61 @@ export default function QuizWithChoose(props) {
                     setQuizAnswers(answers)
                 })
         })
+        await getAnswerList(0)
     }, [])
-    const getAnswerList = (qIndex) => {
-        const answers = []
-        const indexList = []
-        for (let i = 0; indexList.length < 3; i++)
-            if (indexList.indexOf(quizAnswers[Math.floor(Math.random() * quizAnswers.length)]) == -1)
-                indexList.push(quizAnswers[Math.floor(Math.random() * quizAnswers.length)])
+    const getAnswerList = async (qIndex) => {
+        console.log('deneme')
+        let answers = []
         for (let i = 0; i <= 3; i++) {
             if (i == 3)
                 answers.push(questions[qIndex].translate)
             else
-                answers.push(indexList[i])
+                answers.push(quizAnswers[Math.floor(Math.random() * quizAnswers.length)])
         }
-        console.log(answers);
-        //setQuestionAnswers(answers)
+        answers = await [...shuffle(answers)]
+        setQuestionAnswers([...answers])
     }
-    if (questions.length === 0 && quizAnswers.length === 0) return null
-    return (
-        <View style={styles.container}>
-            {getAnswerList(0)}
-            <View style={styles.questionContainer}>
-                <Text style={styles.questionText}>
-                    {questions[0].vocabulary}
-                </Text>
-            </View>
-            {questionAnswers.map((l, i) =>
-                <View style={styles.answersContainer} key={i}>
+    const shuffle = (array) => {
+        var currentIndex = array.length, randomIndex
+        while (0 !== currentIndex) {
+            randomIndex = Math.floor(Math.random() * currentIndex)
+            currentIndex--
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]]
+        }
+        return array
+    }
+    if (questionAnswers.length < 4)
+        return (<View>
+            <ActivityIndicator color='white' size={35} style={styles.activity} />
+        </View>)
+    if (questionAnswers.indexOf(undefined) != -1)
+        getAnswerList(0)
+    else
+        return (
+            <View style={styles.container}>
+                <View style={styles.questionContainer}>
+                    <Text style={styles.questionText}>
+                        {questions[0].vocabulary}
+                    </Text>
                 </View>
-            )}
-        </View>
-    )
+                {questionAnswers.map((l, i) =>
+                    <TouchableHighlight style={styles.answersContainer} key={i}
+                        onPress={() => console.log(l)} underlayColor='white'>
+                        <Text>{l}</Text>
+                    </TouchableHighlight>
+                )}
+            </View>
+        )
 }
 
 const styles = StyleSheet.create({
     container: {
 
+    },
+    activity: {
+        marginTop: '15%',
+        alignSelf: 'center'
     },
     questionContainer: {
         backgroundColor: 'white',
