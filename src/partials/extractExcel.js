@@ -67,7 +67,7 @@ const showNotification = (title, message,) => {
         autoCancel: true,
         vibrate: true,
         vibration: 300,
-        priority: 'high',
+        priority: 'high'
     });
 };
 PushNotification.createChannel(
@@ -75,7 +75,6 @@ PushNotification.createChannel(
         channelId: 123, // (required)
         channelName: "TodoYumak", // (required)
         playSound: true,
-        soundName: 'f1', // (optional) See `soundName` parameter of `localNotification` function
         importance: 4, // (optional) default: 4. Int value of the Android notification importance
         vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
     },
@@ -95,7 +94,7 @@ const exportDataToExcel = (vocabularies) => {
     // Write generated excel to Storage
     RNFS.writeFile(RNFS.DownloadDirectoryPath + '/yds.xlsx', wbout, 'ascii').then((r) => {
         console.log('Success')
-        showNotification("Deneme", "Altyazı")
+        showNotification("YDS Kelime,Quiz ve Sözlük", "Excel dosyası indirildi")
     }).catch((e) => {
         console.log('hata');
         console.log('Error', e)
