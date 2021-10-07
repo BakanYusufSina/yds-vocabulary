@@ -12,30 +12,34 @@ export default function QuizWithChoose(props) {
         createFromLocation: '~www/sqlite_yds.db'
     })
     useEffect(async () => {
-        db.transaction(tx => {
+        await db.transaction(tx => {
             tx.executeSql('SELECT translate FROM dictionary ORDER BY random() LIMIT 10',
                 [],
                 async (tx, results) => {
                     const answers = []
                     for (let i = 0; i < results.rows.length; i++)
                         await answers.push(results.rows.item(i).translate)
-                    setQuizAnswers(answers)
+                    setQuizAnswers(answers)//Get random translate sentences from dictionary table
                 })
         })
-        await getAnswerList(0)
+        await getAnswerList(0)//Get answer list
     }, [])
+    //Get Answers for each questions
     const getAnswerList = async (qIndex) => {
-        console.log('deneme')
         let answers = []
-        for (let i = 0; i <= 3; i++) {
-            if (i == 3)
-                answers.push(questions[qIndex].translate)
-            else
-                answers.push(quizAnswers[Math.floor(Math.random() * quizAnswers.length)])
-        }
+        do {
+            console.log("IsUndefined", answers.indexOf('undefined'));
+            for (let i = 0; i <= 3; i++) {
+                if (i == 3)
+                    await answers.push(questions[qIndex].translate)
+                else
+                    await answers.push(quizAnswers[Math.floor(Math.random() * quizAnswers.length)])
+            }
+        } while (answers.indexOf('undefined') != -1)
         answers = await [...shuffle(answers)]
-        setQuestionAnswers([...answers])
+        setQuestionAnswers([...answers])//Set random answers and question's answer to array
     }
+    //Shuffle questions
     const shuffle = (array) => {
         var currentIndex = array.length, randomIndex
         while (0 !== currentIndex) {
@@ -46,28 +50,26 @@ export default function QuizWithChoose(props) {
         }
         return array
     }
+    //IF questionAnswers not 4 not return page
     if (questionAnswers.length < 4)
         return (<View>
             <ActivityIndicator color='white' size={35} style={styles.activity} />
         </View>)
-    if (questionAnswers.indexOf(undefined) != -1)
-        getAnswerList(0)
-    else
-        return (
-            <View style={styles.container}>
-                <View style={styles.questionContainer}>
-                    <Text style={styles.questionText}>
-                        {questions[0].vocabulary}
-                    </Text>
-                </View>
-                {questionAnswers.map((l, i) =>
-                    <TouchableHighlight style={styles.answersContainer} key={i}
-                        onPress={() => console.log(l)} underlayColor='white'>
-                        <Text>{l}</Text>
-                    </TouchableHighlight>
-                )}
+    return (
+        <View style={styles.container}>
+            <View style={styles.questionContainer}>
+                <Text style={styles.questionText}>
+                    {questions[0].vocabulary}
+                </Text>
             </View>
-        )
+            {questionAnswers.map((l, i) =>
+                <TouchableHighlight style={styles.answersContainer} key={i}
+                    onPress={() => console.log(l)} underlayColor='white'>
+                    <Text>{l}</Text>
+                </TouchableHighlight>
+            )}
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
